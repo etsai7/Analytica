@@ -1,5 +1,4 @@
 import os.path
-from PreProcPDF import PreProcess
 import PyPDF2
 import codecs
 
@@ -15,7 +14,6 @@ def getDataDir(directory):
             pdfFileReader = PyPDF2.PdfFileReader(o)
             fname = './Data/Text/Pre/' + filename.rstrip("_pdf.pdf") + '_proc.txt'
             file = filename.rstrip(".pdf") + '_proc.txt'
-
             f = codecs.open(fname, 'w',"ISO-8859-1")
 
             for x in range(0, 2): # Only need 1st 2 pages
@@ -32,10 +30,17 @@ def getDataDir(directory):
             print("\tPreProc File Dir : " + fname)
             print("\tPostProc File Dir: " + fileSave + "\n")
 
-
         else:
             continue
 
+def PreProcess(filedir, file):
+    fileSave = "./Data/Text/Post/"+ file
+    with open(filedir, 'rb') as infile, open( fileSave, 'w') as outfile:
+        for line in infile:
+            if not line.strip(): continue  # skip the empty line
+            outfile.write(line.decode("ISO-8859-1").rstrip("\r\n"))  # non-empty line. Write it to output''''''
+            outfile.write("\n")
+    return fileSave
 
 
 getDataDir(directory)
