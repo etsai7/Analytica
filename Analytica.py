@@ -2,6 +2,7 @@ import os.path
 import PyPDF2
 import codecs
 import plotly.plotly as py
+from plotly.graph_objs import *
 from PIL import Image
 import plotly.graph_objs as go
 import matplotlib.pyplot as plt
@@ -67,33 +68,89 @@ def DataExtract(fileSave,fileName):
         elif "Summary of Transactions" in line:
             print("Found summary of transactions")
 
+def Yearly_Total_Bar():
+
+    # data = [go.Bar(
+    #             x = year,
+    #             y = val,
+    #             text=val,
+    #             textposition = 'auto',
+    #             marker=dict(
+    #                 color='rgb(158,202,225)',
+    #                 line=dict(
+    #                     color='rgb(8,48,107)',
+    #                     width=1.5),
+    #             ),
+    #             opacity=0.6
+    #     )]
+    # py.sign_in('username', 'api_key')
+    year = []
+    val = []
+    for key in yearly_total:
+        year.append(key)
+        val.append(yearly_total[key])
+
+    print(year)
+    print(val)
+    trace1 = {
+        "x": year,
+        "y": val,
+        "hoverinfo": "x+y+text",
+        "marker": {
+            "color": "rgb(85, 185, 237)",
+            "line": {
+                "color": "rgb(8,48,107)",
+                "width": 2
+            }
+        },
+        "opacity": 0.7,
+        "orientation": "v",
+        "text": val,
+        "textposition": "auto",
+        "textsrc": "etsai7:3:d9b6a5",
+        "type": "bar",
+        "uid": "550fd3",
+        "xsrc": "etsai7:3:af110a",
+        "ysrc": "etsai7:3:84691f"
+    }
+    data = Data([trace1])
+    layout = {
+        "autosize": True,
+        "paper_bgcolor": "rgb(255, 255, 255)",
+        "plot_bgcolor": "rgb(56, 50, 50)",
+        "title": "Year Total",
+        "xaxis": {
+            "autorange": False,
+            "gridcolor": "rgb(25, 24, 24)",
+            "linecolor": "rgb(234, 57, 57)",
+            "range": [2013, 2018],
+            "showgrid": False,
+            "showline": False,
+            "title": "Year<br>",
+            "type": "linear"
+        },
+        "yaxis": {
+            "autorange": True,
+            "gridcolor": "rgb(141, 136, 136)",
+            "range": [0, 11140.2526316],
+            "title": "Total Spent ($)",
+            "type": "linear"
+        }
+    }
+    fig = Figure(data=data, layout=layout)
+    plot_url = py.plot(fig)
+
+    py.iplot(data, filename='Analytica-bar')
+
 getDataDir(directory)
 print(yearly_total)
 
-year = []
-val = []
-for key in yearly_total:
-    year.append(key)
-    val.append(yearly_total[key])
+# Uncomment to save figure to plotly the yearly total
+# Yearly_Total_Bar()
 
-print(year)
-print(val)
-# data = [go.Bar(
-#             x = year,
-#             y = val,
-#             text=val,
-#             textposition = 'auto',
-#             marker=dict(
-#                 color='rgb(158,202,225)',
-#                 line=dict(
-#                     color='rgb(8,48,107)',
-#                     width=1.5),
-#             ),
-#             opacity=0.6
-#     )]
-#
-# py.iplot(data, filename='Analytica-bar')
 
+
+# This is to show the image 
 fig = py.get_figure('https://plot.ly/~etsai7/2')
 py.image.save_as(fig,'etsai7.png')
 
