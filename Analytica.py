@@ -64,6 +64,8 @@ def DataExtract(fileSave,fileName):
 
             print(line.rstrip("\n") + " " + str(total) + " in " + year + "\n")
             yearly_total[year] = (total)
+        elif "Summary of Transactions" in line:
+            print("Found summary of transactions")
 
 getDataDir(directory)
 print(yearly_total)
