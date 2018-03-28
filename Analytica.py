@@ -67,6 +67,9 @@ def DataExtract(fileSave,fileName):
             yearly_total[year] = (total)
         elif "Summary of Transactions" in line:
             print("Found summary of transactions")
+            while("Page" not in line):
+                line = next(file)
+                print(line)
 
 def Yearly_Total_Bar():
 
@@ -150,7 +153,7 @@ print(yearly_total)
 
 
 
-# This is to show the image 
+# This is to show the image
 fig = py.get_figure('https://plot.ly/~etsai7/2')
 py.image.save_as(fig,'etsai7.png')
 
