@@ -67,6 +67,7 @@ def DataExtract(fileSave,fileName):
             yearly_total[year] = (total)
         elif "Summary of Transactions" in line:
             print("Found summary of transactions")
+            Categories = []
             while("Page" not in line):
                 line = next(file)
                 print(line)
