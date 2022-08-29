@@ -1,2 +1,4 @@
 Data/
 PreProcPDF.py
+*.pyc
+__pycache__
