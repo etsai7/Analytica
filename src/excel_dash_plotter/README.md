@@ -19,3 +19,7 @@ This script will retrieve data from an excel sheet to plot on an interactive das
       expenses_default_dir = 'C:/Users/<directory>'
       expenses_excel = ['2022 Expenses.xlsx', '<excel file name>']
       ```
+      
+
+## Learning Resources
+- Using `.agg()` [Stack Overflow](https://stackoverflow.com/questions/51849186/when-using-pandas-groupby-why-use-agg-versus-directly-using-the-function-eg)
