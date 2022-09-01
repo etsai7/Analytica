@@ -6,7 +6,7 @@ class LoggerFormatter(logging.Formatter):
         Additional Colors: https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
     """
 
-    grey = '\x1b[38;21m'
+    grey = '\x1b[38;5;8m'
     blue = '\x1b[38;5;38m'
     yellow = '\x1b[38;5;226m'
     red = '\x1b[38;5;196m'
