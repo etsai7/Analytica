@@ -3,6 +3,7 @@ import pandas as pd
 import calendar
 import logging
 import LoggerFormatter
+import data_processor as dp
 
 
 class Dashboard:
@@ -16,21 +17,21 @@ class Dashboard:
         self.configure_logger()
         self.clean_data()
 
-    def configure_logger(self):
-        self.logger.setLevel(logging.DEBUG)
-        format = '%(asctime)s | %(levelname)8s | %(message)s'
-        stdout_handler = logging.StreamHandler()
-        stdout_handler.setLevel(logging.DEBUG)
-        stdout_handler.setFormatter(LoggerFormatter.LoggerFormatter(format))
-        if self.log_enabled:
-            self.logger.addHandler(stdout_handler)
+    # def configure_logger(self):
+    #     self.logger.setLevel(logging.DEBUG)
+    #     format = '%(asctime)s | %(levelname)8s | %(message)s'
+    #     stdout_handler = logging.StreamHandler()
+    #     stdout_handler.setLevel(logging.DEBUG)
+    #     stdout_handler.setFormatter(LoggerFormatter.LoggerFormatter(format))
+    #     if self.log_enabled:
+    #         self.logger.addHandler(stdout_handler)
 
-    def clean_data(self):
-        self.df = self.df[["Date", "Type", "Company", "Net"]]  # Filter for specific columns
-        self.df = self.df.dropna()  # Remove Nans
-        if self.log_enabled:
-            self.logger.info(self.df.Type.unique())  # Get unique Types
-            self.logger.info("\n"+str(self.df.to_markdown()) + "\n")
+    # def clean_data(self):
+    #     self.df = self.df[["Date", "Type", "Company", "Net"]]  # Filter for specific columns
+    #     self.df = self.df.dropna()  # Remove Nans
+    #     if self.log_enabled:
+    #         self.logger.info(self.df.Type.unique())  # Get unique Types
+    #         self.logger.info("\n"+str(self.df.to_markdown()) + "\n")
 
     def aggregate_monthly_spend(self):
         # Remove out non-spend items
@@ -47,19 +48,25 @@ class Dashboard:
         self.monthly_spend_df = self.rename_column_headers(self.monthly_spend_df, new_headers)
         self.monthly_spend_df['Net Spent'] = self.monthly_spend_df['Net Spent'].map('${:,.2f}'.format)
         self.monthly_spend_df['Month'] = self.monthly_spend_df['Month'].apply(lambda x: calendar.month_name[x])
-        self.logger.info("\n" + str(self.monthly_spend_df.to_markdown(index=True)) + "\n")
+        self.logger.debug("\n" + str(self.monthly_spend_df.to_markdown(index=True)) + "\n")
 
     def rename_column_headers(self, df, headers):
         return df.rename(columns=headers)
     def print_specific_month(self):
         monthly_df = self.df.apply(lambda row: row[self.df['Date'].dt.month == 4])
         monthly_df['Net'] = monthly_df['Net'].map('${:,.2f}'.format)
-        # print(monthly_df.to_markdown())
+        print(monthly_df.to_markdown())
 
 
 # Use pandas to open up an Excel sheet for reading
-dataframe = pd.read_excel(f'{sec.expenses_default_dir}{sec.expenses_excel[0]}', sheet_name='Expenses')
-dashboard = Dashboard(dataframe, log_enabled=False)
+# dataframe = pd.read_excel(f'{sec.expenses_default_dir}{sec.expenses_excel[0]}', sheet_name='Expenses')
+# dashboard = Dashboard(dataframe, log_enabled=True)
+#
+# dashboard.aggregate_monthly_spend()
+# dashboard.print_specific_month()
 
-dashboard.aggregate_monthly_spend()
-dashboard.print_specific_month()
+dp.configure_logger()
+for report in sec.expenses_excel:
+    dataframe = pd.read_excel(f'{sec.expenses_default_dir}{report}', sheet_name='Expenses')
+    dataframe_clean = dp.remove_nan_entries(log_enabled=False, df=dataframe, )
+    monthly_agg = dp.aggregate_monthly_spend(df=dataframe_clean, year=report)
