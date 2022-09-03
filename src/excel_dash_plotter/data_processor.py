@@ -1,26 +1,15 @@
 import logging
-import LoggerFormatter
 import calendar
 
-logger = logging.getLogger(__name__)
-
-
-def configure_logger(log_enabled=True):
-    logger.setLevel(logging.DEBUG)
-    fmt = '%(asctime)s | %(levelname)8s | %(message)s'
-    stdout_handler = logging.StreamHandler()
-    stdout_handler.setLevel(logging.DEBUG)
-    stdout_handler.setFormatter(LoggerFormatter.LoggerFormatter(fmt))
-    if log_enabled:
-        logger.addHandler(stdout_handler)
+log = logging.getLogger('log')
 
 
 def remove_nan_entries(log_enabled=True, df=None):
     df = df[["Date", "Type", "Company", "Net"]]  # Filter for specific columns
     df = df.dropna()  # Remove Nans
     if log_enabled:
-        logger.info(df.Type.unique())  # Get unique Types
-        logger.info("\n" + str(df.to_markdown()) + "\n")
+        log.info(df.Type.unique())  # Get unique Types
+        log.info("\n" + str(df.to_markdown()) + "\n")
     return df
 
 
@@ -39,8 +28,8 @@ def aggregate_monthly_spend(df=None, year=''):
     monthly_spend_df = rename_column_headers(monthly_spend_df, new_headers)
     monthly_spend_df['Net Spent'] = monthly_spend_df['Net Spent'].map('${:,.2f}'.format)
     monthly_spend_df['Month'] = monthly_spend_df['Month'].apply(lambda x: calendar.month_name[x])
-    logger.info(year)
-    logger.debug("\n" + str(monthly_spend_df.to_markdown(index=False)) + "\n")
+    log.info(year)
+    log.debug("\n" + str(monthly_spend_df.to_markdown(index=False)) + "\n")
     return monthly_spend_df
 
 

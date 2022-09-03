@@ -52,3 +52,22 @@ def test_logger():
     logger.addHandler(stdout_handler)
     logger.info("testing the logger")
     logger.warning("warning with the logger")
+
+
+log = None
+
+
+def create_logger():
+    log = logging.getLogger('log')
+    log.setLevel(logging.DEBUG)
+    fmt = '%(asctime)s | %(levelname)8s | %(message)s'
+    stdout_handler = logging.StreamHandler()
+    stdout_handler.setLevel(logging.DEBUG)
+    stdout_handler.setFormatter(LoggerFormatter(fmt))
+    log.addHandler(stdout_handler)
+
+
+def get_logger():
+    if log is None:
+        create_logger()
+    return log
