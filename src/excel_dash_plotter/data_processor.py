@@ -26,7 +26,6 @@ def aggregate_monthly_spend(df=None, year=''):
     # Formatting
     new_headers = {"Date": "Month", "Net": "Net Spent"}
     monthly_spend_df = rename_column_headers(monthly_spend_df, new_headers)
-    monthly_spend_df['Net Spent'] = monthly_spend_df['Net Spent'].map('${:,.2f}'.format)
     monthly_spend_df['Month'] = monthly_spend_df['Month'].apply(lambda x: calendar.month_name[x])
     log.info(year)
     log.debug("\n" + str(monthly_spend_df.to_markdown(index=False)) + "\n")
